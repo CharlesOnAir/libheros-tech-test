@@ -1,5 +1,8 @@
-import type { Metadata } from "next";
+"use client";
+import { SessionProvider } from "next-auth/react";
 import { Geist, Geist_Mono } from "next/font/google";
+import { usePathname } from "next/navigation";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,21 +15,25 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Libheros | Test technique",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Toaster />
+        {!pathname.startsWith("/authentification/") ? (
+          <SessionProvider>{children}</SessionProvider>
+        ) : (
+          children
+        )}
+        <Toaster />
       </body>
     </html>
   );

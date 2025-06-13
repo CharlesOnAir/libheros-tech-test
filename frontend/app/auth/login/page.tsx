@@ -7,22 +7,54 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import showToast from "@/components/ui/toast";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleLogin = async (e: React.FormEvent) => {
+  const [loginCredentials, setLoginCredentials] = useState({
+    email: "",
+    password: "",
+  });
+  const router = useRouter();
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const result = await signIn("credentials", {
+        email: loginCredentials.email,
+        password: loginCredentials.password,
+        redirect: false,
+      });
 
-    console.log("Connexion avec:", { username, password });
-    setIsLoading(false);
+      if (!result?.ok) {
+        showToast({
+          type: "error",
+          message:
+            "Authentification échouée, merci de vérifier vos identifiants",
+        });
+        return;
+      }
+
+      showToast({
+        type: "success",
+        message: "Connexion réussie",
+      });
+      return router.push("/dashboard");
+    } catch (error) {
+      console.log("error", error);
+      showToast({
+        type: "error",
+        message: "Une erreur est survenue lors de la connexion",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -47,7 +79,7 @@ export default function LoginPage() {
               </p>
             </CardHeader>
             <CardContent className="px-0">
-              <form onSubmit={handleLogin} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="username" className="text-sm font-medium">
                     Nom d&apos;utilisateur
@@ -56,8 +88,13 @@ export default function LoginPage() {
                     id="username"
                     type="text"
                     placeholder="Entrez votre nom d'utilisateur"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={loginCredentials.email}
+                    onChange={(e) =>
+                      setLoginCredentials({
+                        ...loginCredentials,
+                        email: e.target.value,
+                      })
+                    }
                     className="h-12"
                     required
                   />
@@ -70,9 +107,13 @@ export default function LoginPage() {
                   <Input
                     id="password"
                     type="password"
-                    placeholder="Entrez votre mot de passe"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={loginCredentials.password}
+                    onChange={(e) =>
+                      setLoginCredentials({
+                        ...loginCredentials,
+                        password: e.target.value,
+                      })
+                    }
                     className="h-12"
                     required
                   />
@@ -84,7 +125,11 @@ export default function LoginPage() {
                     className="w-full h-12 text-base font-medium"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Connexion..." : "Se connecter"}
+                    {isLoading ? (
+                      <ClipLoader size={13} color="#ffffff" />
+                    ) : (
+                      "Se connecter"
+                    )}
                   </Button>
 
                   <div className="text-center mt-6">
