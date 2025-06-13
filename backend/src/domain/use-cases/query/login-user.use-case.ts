@@ -1,8 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { User } from 'src/domain/user/user.entity';
 import { UserService } from 'src/domain/user/user.service';
 import { UseCase } from '../use-cases';
 
-export type LoginUserResult = string;
+export type LoginUserResult = {
+  user: User;
+  token: string;
+};
 
 export interface LoginUserPort {
   email: string;
@@ -28,6 +32,11 @@ export class LoginUserUseCase
     if (!isPasswordValid)
       throw new UnauthorizedException('Invalid credentials');
 
-    return this.userService.createToken(existingUser);
+    const token = this.userService.createToken(existingUser);
+
+    return {
+      user: existingUser,
+      token,
+    };
   }
 }

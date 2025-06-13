@@ -2,13 +2,58 @@
 
 import Image from "next/image";
 
+import api from "@/app/utils/axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import showToast from "@/components/ui/toast";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [registerCredentials, setRegisterCredentials] = useState({
+    lastname: "",
+    firstname: "",
+    email: "",
+    emailConfirmation: "",
+    password: "",
+    passwordConfirmation: "",
+  });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await api.post(
+        "/authentification/register",
+        registerCredentials
+      );
+
+      if (response.status !== 201) {
+        showToast({
+          type: "error",
+          message: response.data.message,
+        });
+        return;
+      }
+
+      showToast({
+        type: "success",
+        message: "Compte créé avec succès",
+      });
+      return router.push("/auth/login");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex">
       <div className="flex-1 flex items-center justify-center bg-white px-8">
@@ -31,7 +76,7 @@ export default function RegisterPage() {
               </p>
             </CardHeader>
             <CardContent className="px-0">
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="lastname" className="text-sm font-medium">
@@ -43,6 +88,13 @@ export default function RegisterPage() {
                       placeholder="Entrez votre nom"
                       className="h-12"
                       required
+                      value={registerCredentials.lastname}
+                      onChange={(e) =>
+                        setRegisterCredentials({
+                          ...registerCredentials,
+                          lastname: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
@@ -56,6 +108,13 @@ export default function RegisterPage() {
                       placeholder="Entrez votre prénom"
                       className="h-12"
                       required
+                      value={registerCredentials.firstname}
+                      onChange={(e) =>
+                        setRegisterCredentials({
+                          ...registerCredentials,
+                          firstname: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -71,6 +130,13 @@ export default function RegisterPage() {
                       placeholder="Entrez votre adresse e-mail"
                       className="h-12"
                       required
+                      value={registerCredentials.email}
+                      onChange={(e) =>
+                        setRegisterCredentials({
+                          ...registerCredentials,
+                          email: e.target.value,
+                        })
+                      }
                     />
                   </div>
                   <div className="space-y-2">
@@ -86,6 +152,13 @@ export default function RegisterPage() {
                       placeholder="Entrez votre adresse e-mail"
                       className="h-12"
                       required
+                      value={registerCredentials.emailConfirmation}
+                      onChange={(e) =>
+                        setRegisterCredentials({
+                          ...registerCredentials,
+                          emailConfirmation: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -101,6 +174,13 @@ export default function RegisterPage() {
                       placeholder="Entrez votre mot de passe"
                       className="h-12"
                       required
+                      value={registerCredentials.password}
+                      onChange={(e) =>
+                        setRegisterCredentials({
+                          ...registerCredentials,
+                          password: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
@@ -117,6 +197,13 @@ export default function RegisterPage() {
                       placeholder="Entrez votre mot de passe"
                       className="h-12"
                       required
+                      value={registerCredentials.passwordConfirmation}
+                      onChange={(e) =>
+                        setRegisterCredentials({
+                          ...registerCredentials,
+                          passwordConfirmation: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -126,7 +213,11 @@ export default function RegisterPage() {
                     type="submit"
                     className="w-full h-12 text-base font-medium"
                   >
-                    Créer un compte
+                    {isLoading ? (
+                      <ClipLoader size={13} color="#ffffff" />
+                    ) : (
+                      "Créer un compte"
+                    )}
                   </Button>
 
                   <div className="text-center mt-6">
