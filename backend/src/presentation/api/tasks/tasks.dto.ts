@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 
 export enum TaskStatus {
   IN_PROGRESS = 'in_progress',
@@ -10,12 +11,14 @@ export class CreateTaskDto {
     description: 'The title of the task',
     example: 'Task 1',
   })
+  @IsNotEmpty()
   title: string;
 
   @ApiProperty({
     description: 'The description of the task',
     example: 'This is a task',
   })
+  @IsNotEmpty()
   shortDescription: string;
 
   @ApiProperty({
@@ -28,12 +31,14 @@ export class CreateTaskDto {
     description: 'The end date of the task',
     example: '2021-01-01T00:00:00.000Z',
   })
+  @IsNotEmpty()
   endDate: Date;
 
   @ApiProperty({
     description: 'The id of the task list that the task belongs to',
     example: 'dehjdzehjdze-bahdydje-dhehj-dhehj-dhehj',
   })
+  @IsNotEmpty()
   tasksListsId: string;
 }
 

@@ -1,10 +1,10 @@
-import { AXIOS_BASE_URL } from "@/constants";
+import { BASE_API_URL } from "@/constants";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 
 const api = axios.create({
-  baseURL: AXIOS_BASE_URL,
+  baseURL: BASE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -27,7 +27,9 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     const errorMessage =
-      error.response?.data?.message ||
+      (Array.isArray(error.response?.data?.message)
+        ? error.response?.data?.message[0]
+        : error.response?.data?.message) ||
       error.message ||
       "Une erreur est survenue";
 
