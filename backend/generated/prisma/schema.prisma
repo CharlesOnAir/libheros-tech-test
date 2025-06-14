@@ -15,14 +15,42 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  lastname  String
-  firstname String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id         String       @id @default(uuid())
+  lastname   String
+  firstname  String
+  email      String       @unique
+  password   String
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+  tasksLists TasksLists[]
 
   @@index([email])
   @@map("users")
+}
+
+model TasksLists {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  tasks       Task[]
+  user        User?    @relation(fields: [userId], references: [id])
+  userId      String?  @map("user_id")
+
+  @@map("tasks_lists")
+}
+
+model Task {
+  id               String      @id @default(uuid())
+  title            String
+  shortDescription String?     @map("short_description")
+  longDescription  String?     @map("long_description")
+  endDate          DateTime?   @map("end_date")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+  tasksLists       TasksLists? @relation(fields: [tasksListsId], references: [id])
+  tasksListsId     String?     @map("tasks_lists_id")
+
+  @@map("task")
 }
