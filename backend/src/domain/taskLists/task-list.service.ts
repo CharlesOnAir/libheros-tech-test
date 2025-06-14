@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Mutable } from 'src/utils/types';
 import { TASKS_LIST_REPOSITORY } from '../injection-tokens';
-import { TaskList } from './task-list.entity';
+import { CreateTaskList, TaskList } from './task-list.entity';
 import { TaskListRepository } from './task-list.repository';
 
 @Injectable()
@@ -16,7 +15,7 @@ export class TaskListService {
   };
 
   create = async (
-    tasksList: Mutable<TaskList>,
+    tasksList: CreateTaskList,
     userId: string,
   ): Promise<TaskList> => {
     return this.taskListRepository.create(tasksList, userId);

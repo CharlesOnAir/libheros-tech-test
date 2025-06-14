@@ -5,4 +5,4 @@ dotenv.config();
 export const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET;
 
 // AXIOS CONFIGURATION
-export const AXIOS_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+export const BASE_API_URL = process.env.NEXT_PUBLIC_API_URL;
