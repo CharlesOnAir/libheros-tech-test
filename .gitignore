@@ -2,7 +2,7 @@
 /backend/dist
 /backend/node_modules
 /backend/build
-/backend/generated/prisma
+/backend/generated/
 
 # Logs
 logs

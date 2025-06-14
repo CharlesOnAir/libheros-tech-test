@@ -7,7 +7,7 @@ export type Prettify<T> = {
 export type LooseRecord<T> = Record<string | number | symbol, T>;
 
 export interface BaseEntity {
-  id: number;
+  id: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,2 +1,3 @@
 /* Repositories */
 export const USER_REPOSITORY = 'USER_REPOSITORY';
+export const TASKS_LIST_REPOSITORY = 'TASKS_LIST_REPOSITORY';
