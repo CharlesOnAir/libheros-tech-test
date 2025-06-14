@@ -1,6 +1,6 @@
 import { BaseEntity } from 'src/utils/types';
 
-export interface TasksList extends BaseEntity {
+export interface TaskList extends BaseEntity {
   title: string;
   description: string;
 }

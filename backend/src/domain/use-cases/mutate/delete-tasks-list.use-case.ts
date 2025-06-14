@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { TasksList } from 'src/domain/tasksList/tasksList.entity';
-import { TasksListService } from 'src/domain/tasksList/tasksList.service';
+import { TaskList } from 'src/domain/taskLists/task-list.entity';
+import { TaskListService } from 'src/domain/taskLists/task-list.service';
 import { UseCase } from '../use-cases';
 
-export type DeleteTasksListResult = TasksList;
+export type DeleteTasksListResult = TaskList;
 
 export interface DeleteTasksListPort {
   id: string;
@@ -14,7 +14,7 @@ export interface DeleteTasksListPort {
 export class DeleteTasksListUseCase
   implements UseCase<DeleteTasksListPort, DeleteTasksListResult>
 {
-  constructor(private tasksListService: TasksListService) {}
+  constructor(private tasksListService: TaskListService) {}
 
   async execute({
     id,

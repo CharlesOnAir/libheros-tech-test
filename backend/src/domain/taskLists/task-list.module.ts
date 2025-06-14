@@ -3,14 +3,14 @@ import { RepositoriesModule } from 'src/infrastructure/repositories/repositories
 import { CreateTasksListUseCase } from '../use-cases/mutate/create-tasks-list.use-case';
 import { DeleteTasksListUseCase } from '../use-cases/mutate/delete-tasks-list.use-case';
 import { GetTasksListOfUserUseCase } from '../use-cases/query/get-tasks-list-of-user.use-case';
-import { TasksListService } from './tasksList.service';
+import { TaskListService } from './task-list.service';
 
 const USE_CASES = [
   CreateTasksListUseCase,
   DeleteTasksListUseCase,
   GetTasksListOfUserUseCase,
 ];
-const SERVICES = [TasksListService];
+const SERVICES = [TaskListService];
 
 @Module({
   providers: [...USE_CASES, ...SERVICES],

@@ -1,11 +1,14 @@
 import { Provider } from '@nestjs/common';
 import {
+  TASK_REPOSITORY,
   TASKS_LIST_REPOSITORY,
   USER_REPOSITORY,
 } from 'src/domain/injection-tokens';
-import { TasksListRepository } from 'src/domain/tasksList/tasksList.repository';
+import { TaskListRepository } from 'src/domain/taskLists/task-list.repository';
+import { TaskRepository } from 'src/domain/tasks/task.repository';
 import { UserRepository } from 'src/domain/user/user.repository';
-import { PrismaTasksListRepository } from './repositories/tasksList.repository';
+import { PrismaTasksListRepository } from './repositories/task-list.repository';
+import { PrismaTaskRepository } from './repositories/task.repository';
 import { PrismaUserRepository } from './repositories/user.repository';
 
 export const UserRepositoryProvider: Provider<UserRepository> = {
@@ -13,7 +16,12 @@ export const UserRepositoryProvider: Provider<UserRepository> = {
   useClass: PrismaUserRepository,
 };
 
-export const TasksListRepositoryProvider: Provider<TasksListRepository> = {
+export const TasksListRepositoryProvider: Provider<TaskListRepository> = {
   provide: TASKS_LIST_REPOSITORY,
   useClass: PrismaTasksListRepository,
+};
+
+export const TaskRepositoryProvider: Provider<TaskRepository> = {
+  provide: TASK_REPOSITORY,
+  useClass: PrismaTaskRepository,
 };
