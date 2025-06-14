@@ -1,5 +1,5 @@
 import api from "@/app/utils/axios";
-import { Plus, X } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import { mutate } from "swr";
 import { Badge } from "../ui/badge";
@@ -115,19 +115,6 @@ export function ProjectDetailsSheet({
       await mutate("/tasks/list");
     } catch (error) {
       console.log("Error updating task status:", error);
-    }
-  };
-
-  const removeTask = async (taskId: string) => {
-    try {
-      await api.delete(`/tasks/${taskId}`);
-      setLocalTasks((prevTasks) =>
-        prevTasks.filter((task) => task.id !== taskId)
-      );
-
-      await mutate("/tasks/list");
-    } catch (error) {
-      console.log("Error removing task:", error);
     }
   };
 
@@ -348,15 +335,6 @@ export function ProjectDetailsSheet({
                           </p>
                         )}
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeTask(task.id)}
-                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                      >
-                        <X className="h-3 w-3" />
-                        <span className="sr-only">Supprimer la tâche</span>
-                      </Button>
                     </div>
                   </div>
                 ))}

@@ -146,7 +146,7 @@ export function ProjectCard({
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleDelete}
         title="Supprimer la liste de tâches"
-        description="Êtes-vous sûr de vouloir supprimer cette liste de tâches ? Cette action est irréversible."
+        description="Êtes-vous sûr de vouloir supprimer cette liste de tâches ? Toutes les tâches de cette liste seront supprimées. Cette action est irréversible."
       />
     </>
   );
