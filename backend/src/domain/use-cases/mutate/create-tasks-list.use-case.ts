@@ -1,10 +1,10 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { TasksList } from 'src/domain/tasksList/tasksList.entity';
-import { TasksListService } from 'src/domain/tasksList/tasksList.service';
-import { CreateTaskListDto } from 'src/presentation/api/tasks/tasks.dto';
+import { TaskList } from 'src/domain/taskLists/task-list.entity';
+import { TaskListService } from 'src/domain/taskLists/task-list.service';
+import { CreateTaskListDto } from 'src/presentation/api/tasks/list/tasks-list.dto';
 import { UseCase } from '../use-cases';
 
-export type CreateTasksListResult = TasksList;
+export type CreateTasksListResult = TaskList;
 
 export interface CreateTasksListPort {
   taskList: CreateTaskListDto;
@@ -15,7 +15,7 @@ export interface CreateTasksListPort {
 export class CreateTasksListUseCase
   implements UseCase<CreateTasksListPort, CreateTasksListResult>
 {
-  constructor(private tasksListService: TasksListService) {}
+  constructor(private tasksListService: TaskListService) {}
 
   async execute({
     taskList,

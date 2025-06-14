@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { TasksList } from 'src/domain/tasksList/tasksList.entity';
-import { TasksListRepository } from 'src/domain/tasksList/tasksList.repository';
+import { TaskList } from 'src/domain/taskLists/task-list.entity';
+import { TaskListRepository } from 'src/domain/taskLists/task-list.repository';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
-export class PrismaTasksListRepository implements TasksListRepository {
+export class PrismaTasksListRepository implements TaskListRepository {
   constructor(private prisma: PrismaService) {}
 
-  getAllByUserId = async (userId: string): Promise<TasksList[]> => {
+  getAllByUserId = async (userId: string): Promise<TaskList[]> => {
     return this.prisma.tasksLists.findMany({ where: { userId } });
   };
 
   create = async (
-    taskList: Omit<TasksList, 'id'>,
+    taskList: Omit<TaskList, 'id'>,
     userId: string,
-  ): Promise<TasksList> => {
+  ): Promise<TaskList> => {
     return this.prisma.tasksLists.create({
       data: { ...taskList, userId },
     });
@@ -23,7 +23,7 @@ export class PrismaTasksListRepository implements TasksListRepository {
   findByTitleAndUserId = async (
     title: string,
     userId: string,
-  ): Promise<TasksList | null> => {
+  ): Promise<TaskList | null> => {
     return this.prisma.tasksLists.findFirst({
       where: { title, userId },
     });
@@ -32,11 +32,11 @@ export class PrismaTasksListRepository implements TasksListRepository {
   findByIdAndUserId = async (
     id: string,
     userId: string,
-  ): Promise<TasksList | null> => {
+  ): Promise<TaskList | null> => {
     return this.prisma.tasksLists.findFirst({ where: { id, userId } });
   };
 
-  delete = async (id: string, userId: string): Promise<TasksList> => {
+  delete = async (id: string, userId: string): Promise<TaskList> => {
     return this.prisma.tasksLists.delete({ where: { id, userId } });
   };
 }
